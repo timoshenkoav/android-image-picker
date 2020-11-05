@@ -77,14 +77,15 @@ public class ImagePickerFragment extends Fragment implements ImagePickerView {
     private ContentObserver observer;
 
     private boolean isCameraOnly;
-
+    private Bundle params;
 
     public ImagePickerFragment() {
         // Required empty public constructor.
     }
 
     public static ImagePickerFragment newInstance(@Nullable ImagePickerConfig config,
-                                                  @Nullable CameraOnlyConfig cameraOnlyConfig) {
+            @Nullable CameraOnlyConfig cameraOnlyConfig,
+            @Nullable Bundle params) {
         ImagePickerFragment fragment = new ImagePickerFragment();
         Bundle args = new Bundle();
         if (config != null) {
@@ -92,6 +93,7 @@ public class ImagePickerFragment extends Fragment implements ImagePickerView {
         }
         if (cameraOnlyConfig != null) {
             args.putParcelable(CameraOnlyConfig.class.getSimpleName(), cameraOnlyConfig);
+            args.putParcelable("params", params);
         }
         fragment.setArguments(args);
         return fragment;
@@ -112,7 +114,10 @@ public class ImagePickerFragment extends Fragment implements ImagePickerView {
         if (savedInstanceState != null) {
             presenter.setCameraModule((DefaultCameraModule) savedInstanceState.getSerializable(STATE_KEY_CAMERA_MODULE));
         }
-
+        final Bundle args = getArguments();
+        if (args != null) {
+            params = args.getParcelable("params");
+        }
         if (isCameraOnly) {
             if (savedInstanceState == null) {
                 captureImageWithPermission();
@@ -199,7 +204,6 @@ public class ImagePickerFragment extends Fragment implements ImagePickerView {
                 onDone();
             }
         });
-
     }
 
     private void setupComponents() {
@@ -291,12 +295,13 @@ public class ImagePickerFragment extends Fragment implements ImagePickerView {
     /**
      * Request for permission
      * If permission denied or app is first launched, request for permission
-     * If permission denied and user choose 'Never Ask Again', show snackbar with an action that navigate to app settings
+     * If permission denied and user choose 'Never Ask Again', show snackbar with an action that
+     * navigate to app settings
      */
     private void requestWriteExternalPermission() {
         logger.w("Write External permission is not granted. Requesting permission");
 
-        final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        final String[] permissions = new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE };
 
         if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             requestPermissions(permissions, RC_PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
@@ -442,7 +447,7 @@ public class ImagePickerFragment extends Fragment implements ImagePickerView {
         if (!CameraHelper.checkCameraAvailability(getActivity())) {
             return;
         }
-        presenter.captureImage(this, getBaseConfig(), RC_CAPTURE);
+        presenter.captureImage(this, getBaseConfig(), RC_CAPTURE, params);
     }
 
     private void startContentObserver() {
@@ -462,7 +467,6 @@ public class ImagePickerFragment extends Fragment implements ImagePickerView {
         getActivity().getContentResolver()
                 .registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, false, observer);
     }
-
 
     @Override
     public void onDestroy() {

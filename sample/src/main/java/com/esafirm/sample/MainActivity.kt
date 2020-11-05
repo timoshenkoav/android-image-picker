@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Environment
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import com.esafirm.imagepicker.features.*
 import com.esafirm.imagepicker.features.imageloader.DefaultImageLoader
 import com.esafirm.imagepicker.model.Image
@@ -43,7 +44,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun captureImage() {
-        ImagePicker.cameraOnly().start(this)
+
+        ImagePicker.cameraOnly(bundleOf("android.intent.extra.USE_FRONT_CAMERA" to 1,"android.intent.extras.LENS_FACING_FRONT" to 1,"android.intent.extras.CAMERA_FACING" to android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT)).start(this)
     }
 
     private val action = { images: List<Image>? -> printImages(images) }

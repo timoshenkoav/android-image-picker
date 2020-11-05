@@ -2,6 +2,7 @@ package com.esafirm.imagepicker.features;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -101,9 +102,9 @@ class ImagePickerPresenter extends BasePresenter<ImagePickerView> {
         }
     }
 
-    void captureImage(Fragment fragment, BaseConfig config, int requestCode) {
+    void captureImage(Fragment fragment, BaseConfig config, int requestCode, Bundle bundle) {
         Context context = fragment.getActivity().getApplicationContext();
-        Intent intent = getCameraModule().getCameraIntent(fragment.getActivity(), config);
+        Intent intent = getCameraModule().getCameraIntent(fragment.getActivity(), config, bundle);
         if (intent == null) {
             Toast.makeText(context, context.getString(R.string.ef_error_create_image_file), Toast.LENGTH_LONG).show();
             return;
