@@ -6,6 +6,7 @@ import android.content.Intent
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.provider.MediaStore
 import com.esafirm.imagepicker.features.ImagePickerConfigFactory
 import com.esafirm.imagepicker.features.common.BaseConfig
@@ -25,14 +26,16 @@ class DefaultCameraModule : CameraModule, Serializable {
      * Helper function to get camera Intent without config
      */
     fun getCameraIntent(context: Context): Intent? {
-        return getCameraIntent(context, ImagePickerConfigFactory.createDefault(context))
+        return getCameraIntent(context, ImagePickerConfigFactory.createDefault(context), null)
     }
 
-    override fun getCameraIntent(context: Context, config: BaseConfig): Intent? {
+    override fun getCameraIntent(context: Context, config: BaseConfig, bundle: Bundle?): Intent? {
         prepareForNewIntent()
 
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         val imageFile = ImagePickerUtils.createImageFile(config.imageDirectory, context)
+        if (bundle!=null)
+            intent.putExtras(bundle)
 
         if (imageFile != null) {
             val appContext = context.applicationContext

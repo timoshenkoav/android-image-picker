@@ -52,6 +52,7 @@ public class ImagePickerActivity extends AppCompatActivity implements ImagePicke
         }
         config = getIntent().getExtras().getParcelable(ImagePickerConfig.class.getSimpleName());
         CameraOnlyConfig cameraOnlyConfig = getIntent().getExtras().getParcelable(CameraOnlyConfig.class.getSimpleName());
+        Bundle params = getIntent().getExtras().getParcelable("bundle");
 
         boolean isCameraOnly = cameraOnlyConfig != null;
 
@@ -68,7 +69,7 @@ public class ImagePickerActivity extends AppCompatActivity implements ImagePicke
             // The fragment has been restored.
             imagePickerFragment = (ImagePickerFragment) getSupportFragmentManager().findFragmentById(R.id.ef_imagepicker_fragment_placeholder);
         } else {
-            imagePickerFragment = ImagePickerFragment.newInstance(config, cameraOnlyConfig);
+            imagePickerFragment = ImagePickerFragment.newInstance(config, cameraOnlyConfig, params);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.ef_imagepicker_fragment_placeholder, imagePickerFragment);
             ft.commit();

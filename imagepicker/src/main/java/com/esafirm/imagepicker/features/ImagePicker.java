@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
+import android.os.Bundle;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.StyleRes;
@@ -85,7 +86,11 @@ public abstract class ImagePicker {
     }
 
     public static ImagePickerCameraOnly cameraOnly() {
-        return new ImagePickerCameraOnly();
+        return new ImagePickerCameraOnly(new Bundle());
+    }
+
+    public static ImagePickerCameraOnly cameraOnly(Bundle opts) {
+        return new ImagePickerCameraOnly(opts);
     }
 
     /* --------------------------------------------------- */

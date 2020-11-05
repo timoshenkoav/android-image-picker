@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
+import android.os.Bundle;
 import com.esafirm.imagepicker.features.ImagePickerActivity;
 import com.esafirm.imagepicker.features.ImagePickerConfigFactory;
 import com.esafirm.imagepicker.features.IpCons;
@@ -11,8 +12,16 @@ import com.esafirm.imagepicker.features.IpCons;
 import androidx.fragment.app.Fragment;
 
 public class ImagePickerCameraOnly {
-
+    private final Bundle bundle;
     private CameraOnlyConfig config = ImagePickerConfigFactory.createCameraDefault();
+
+    public ImagePickerCameraOnly(Bundle bundle) {
+        this.bundle = bundle;
+    }
+
+    public Bundle getBundle() {
+        return bundle;
+    }
 
     public ImagePickerCameraOnly imageDirectory(String directory) {
         config.setImageDirectory(directory);
@@ -51,6 +60,7 @@ public class ImagePickerCameraOnly {
     public Intent getIntent(Context context) {
         Intent intent = new Intent(context, ImagePickerActivity.class);
         intent.putExtra(CameraOnlyConfig.class.getSimpleName(), config);
+        intent.putExtra("bundle", bundle);
         return intent;
     }
 }

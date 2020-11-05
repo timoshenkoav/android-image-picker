@@ -61,7 +61,7 @@ class CustomUIActivity : AppCompatActivity() {
                 .findFragmentById(R.id.ef_imagepicker_fragment_placeholder) as ImagePickerFragment
         } else {
             IpLogger.getInstance().e("Making fragment")
-            imagePickerFragment = ImagePickerFragment.newInstance(config, cameraOnlyConfig)
+            imagePickerFragment = ImagePickerFragment.newInstance(config, cameraOnlyConfig, null)
             supportFragmentManager.beginTransaction()
                 .replace(R.id.ef_imagepicker_fragment_placeholder, imagePickerFragment)
                 .commit()
