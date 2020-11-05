@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.MediaStore;
 
 import androidx.core.content.FileProvider;
@@ -26,21 +27,25 @@ public class DefaultCameraModule implements CameraModule, Serializable {
     private String currentImagePath;
 
     public Intent getCameraIntent(Context context) {
-        return getCameraIntent(context, ImagePickerConfigFactory.createDefault(context));
+        return getCameraIntent(context, ImagePickerConfigFactory.createDefault(context), null);
     }
 
     @Override
-    public Intent getCameraIntent(Context context, BaseConfig config) {
+    public Intent getCameraIntent(Context context, BaseConfig config, Bundle bundle) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File imageFile = ImagePickerUtils.createImageFile(config.getImageDirectory(), context);
-
+        if (bundle!=null){
+            intent.putExtras(bundle);
+        }
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
             ContentValues values = new ContentValues();
             values.put(MediaStore.Images.Media.DISPLAY_NAME, imageFile.getName());
             values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+
             ContentResolver resolver = context.getContentResolver();
             Uri collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
             Uri uri = resolver.insert(collection,values);
+            currentImagePath = uri.toString();
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
             return intent;
         }else{
