@@ -37,9 +37,9 @@ public class ImagePickerUtils {
         if (savePath.isFullPath()) {
             mediaStorageDir = new File(path);
         } else {
-            File parent = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
-                    ? context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                    : Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            File parent = context.getCacheDir();//Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+            //        ? context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+             //       : Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
             mediaStorageDir = new File(parent, path);
         }
 
